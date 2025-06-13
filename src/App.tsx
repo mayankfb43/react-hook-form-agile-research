@@ -1,36 +1,14 @@
-import { forwardRef, type ForwardedRef } from "react";
-import { useForm, type FieldError } from "react-hook-form";
-import React from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { PersonalDetails } from "./components/PersonalDetails";
+import { Address } from "./components/Address";
 
 type ContactForm = {
   name: string;
   email: string;
 };
 
-type TextFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
-  error: FieldError | undefined;
-};
-
-const TextField = forwardRef(
-  (props: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
-    const { type = "text", label, error, ...other } = props;
-    return (
-      <>
-        <input type={type} {...other} ref={ref} />
-        <label>{label}</label>
-        {error?.message}
-      </>
-    );
-  }
-);
-
 export default function App() {
-  let {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ContactForm>();
+  const methods = useForm<ContactForm>();
 
   function initiateSubmit(formState: ContactForm) {
     console.log(formState);
@@ -38,16 +16,11 @@ export default function App() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(initiateSubmit)}>
-        <TextField
-          label="Name"
-          type="text"
-          {...register("name", {
-            required: "this is required",
-          })}
-          error={errors.name}
-        />
-        <input type="text" {...register("email")} />
+      <form onSubmit={methods.handleSubmit(initiateSubmit)}>
+        <FormProvider {...methods}>
+          <PersonalDetails />
+          <Address />
+        </FormProvider>
         <input type="submit" value={"submit"} />
       </form>
     </>
