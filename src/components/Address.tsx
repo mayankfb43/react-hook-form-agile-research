@@ -1,13 +1,12 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useFormState } from "react-hook-form";
 import { TextField } from "../form-control/TextField";
-
+import { useRenderCount } from "../hooks/UseRenderCount";
 export const Address = () => {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
+  const { register } = useFormContext();
+  const { errors } = useFormState({ name: ["street", "city"] });
   return (
     <>
+      {useRenderCount()}
       <TextField
         label="Street"
         type="text"
