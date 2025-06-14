@@ -16,6 +16,7 @@ type ContactForm = {
 
 export default function App() {
   const methods = useForm<ContactForm>({
+    mode: "onChange",
     defaultValues: {
       foodItems: [
         { name: "Apple Pie", quantity: 5 },
@@ -32,9 +33,11 @@ export default function App() {
     <>
       <form onSubmit={methods.handleSubmit(initiateSubmit)}>
         <FormProvider {...methods}>
-          <PersonalDetails />
-          <Address />
-          <FoodItemList />
+          <table border={1}>
+            <PersonalDetails />
+            <Address />
+            <FoodItemList />
+          </table>
         </FormProvider>
         <input type="submit" value={"submit"} />
       </form>

@@ -7,31 +7,37 @@ export const Address = () => {
   return (
     <>
       {useRenderCount()}
-      <TextField
-        label="Street"
-        type="text"
-        {...register("street", {
-          required: "this is required",
-        })}
-        error={errors.street}
-      />
-      <TextField
-        label="City"
-        type="text"
-        {...register("city", {
-          required: "this is required",
-          validate: {
-            checkEmail(value) {
-              if (value === "delhi") {
-                return "city not allowed";
-              } else {
-                return true;
-              }
-            },
-          },
-        })}
-        error={errors.city}
-      />
+      <tr>
+        <td>
+          <TextField
+            label="Street"
+            type="text"
+            {...register("street", {
+              required: "this is required",
+            })}
+            error={errors.street}
+          />
+        </td>
+        <td>
+          <TextField
+            label="City"
+            type="text"
+            {...register("city", {
+              required: "this is required",
+              validate: {
+                checkEmail(value) {
+                  if (value === "delhi") {
+                    return "city not allowed";
+                  } else {
+                    return true;
+                  }
+                },
+              },
+            })}
+            error={errors.city}
+          />
+        </td>
+      </tr>
     </>
   );
 };
