@@ -7,6 +7,7 @@ import {
 import type { FoodItemType } from "../App";
 import { TextField } from "../form-control/TextField";
 import { useEffect } from "react";
+import { useRenderCount } from "../hooks/UseRenderCount";
 
 export function FoodItemList() {
   const { register, control, getValues, trigger, clearErrors } =
@@ -15,13 +16,14 @@ export function FoodItemList() {
       city: string;
     }>();
   const { errors } = useFormState({ name: ["foodItems"] });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, swap } = useFieldArray({
     name: "foodItems",
     control,
   });
 
   // 👇 Watch city value so that dependent validations get triggered on change
   const city = useWatch({ name: "city", control });
+  const foodItems = useWatch({ name: "foodItems", control });
 
   useEffect(() => {
     trigger("foodItems.0.quantity");
@@ -31,9 +33,10 @@ export function FoodItemList() {
     append({ name: "Food", quantity: 1 });
     clearErrors("foodItems");
   }
-
+  let formValues = getValues();
   return (
     <>
+      {useRenderCount()}
       <button onClick={onRowAdd}>Add</button>
       {fields.map((field, index) => {
         return (
@@ -77,10 +80,35 @@ export function FoodItemList() {
               <button
                 onClick={() => {
                   remove(index);
+                  setTimeout(() => {
+                    for (let i = 0; i < foodItems.length; i++) {
+                      trigger(`foodItems.${i}.quantity`);
+                    }
+                  }, 0);
                 }}
               >
                 Remove
               </button>
+              {index != foodItems.length - 1 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    swap(index, index + 1);
+                  }}
+                >
+                  move down
+                </button>
+              )}
+              {index != 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    swap(index, index - 1);
+                  }}
+                >
+                  move up
+                </button>
+              )}
             </td>
           </tr>
         );
